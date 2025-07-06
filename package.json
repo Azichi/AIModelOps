@@ -1,0 +1,7 @@
+{
+  "name": "aimodelops-root",
+  "private": true,
+  "scripts": {
+    "dev": "cd frontend && npm run dev"
+  }
+}
