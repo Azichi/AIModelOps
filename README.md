@@ -10,8 +10,12 @@ AIModelOps/
 ├── frontend/
 ├── runner/
 ├── cli/
+├── db/
+│   ├── prompts.db
+│   └── schema.sql
 ├── README.md
-└── requirements.txt
+├── requirements.txt
+├── package.json
 
 ```
 
