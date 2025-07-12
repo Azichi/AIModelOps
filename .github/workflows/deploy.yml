@@ -46,6 +46,8 @@ jobs:
             --name aimocr-runner \
             --image aimocr.azurecr.io/runner:latest \
             --registry-login-server aimocr.azurecr.io \
+            --registry-username ${{ secrets.ACR_USERNAME }} \
+            --registry-password ${{ secrets.ACR_PASSWORD }} \
             --cpu 1 \
             --memory 2 \
             --dns-name-label aimocr-runner-dns \
@@ -64,6 +66,8 @@ jobs:
             --name aimocr-frontend \
             --image aimocr.azurecr.io/frontend:latest \
             --registry-login-server aimocr.azurecr.io \
+            --registry-username ${{ secrets.ACR_USERNAME }} \
+            --registry-password ${{ secrets.ACR_PASSWORD }} \
             --cpu 1 \
             --memory 1 \
             --dns-name-label aimocr-frontend-dns \
