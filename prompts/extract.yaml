@@ -1,3 +1,4 @@
-Extract key info from the following text:
+template: |
+  Extract key info from the following text:
 
-{input}
+  {input}

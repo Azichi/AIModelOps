@@ -1,0 +1,14 @@
+template: |
+  Rewrite the provided draft.
+
+  Current Draft:
+  {current_draft}
+
+  Issue Analysis:
+  {diagnose_json}
+
+  Global Style Settings:
+  {global_style_settings}
+
+  Task:
+  Rewrite the draft according to the analysis, clearly marking redundant lines with <<<CUT>>>. Output only revised draft text.

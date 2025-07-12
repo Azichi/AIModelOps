@@ -11,6 +11,8 @@ import {
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { usePromptCtx } from '../PromptContext';
 import { useConfirm } from './Confirm';
+import { Prompt, Chain } from '../types';
+
 
 export const PromptCards = () => {
   const {
@@ -22,6 +24,8 @@ export const PromptCards = () => {
   } = usePromptCtx();
   const toast = useToast();
   const { confirm, ConfirmModal } = useConfirm();
+  const CHAIN_MODE_ID = '__chain_mode__';
+
 
   if (!selectedCategory)
     return <Box color='white.500'>No category selected.</Box>;
@@ -43,13 +47,15 @@ export const PromptCards = () => {
     }
   };
 
-  const handleEdit = (pId: string) => {
-    const p = selectedCategory.prompts.find(p => p.id === pId);
-    if (!p) return;
-    const name = prompt('Edit prompt name:', p.name);
-    if (name && name.trim())
-      editPrompt(selectedCategory.id, { ...p, name: name.trim() });
-  };
+const handleEdit = (pId: string) => {
+  const p = selectedCategory.prompts.find(p => p.id === pId);
+  if (!p) return;
+  if (!('template' in p && 'variables' in p)) return;
+  const name = prompt('Edit prompt name:', p.name);
+  if (name && name.trim())
+    editPrompt(selectedCategory.id, { ...p, name: name.trim() });
+};
+
 
   const handleDelete = async (pId: string) => {
     if (await confirm()) {
@@ -78,16 +84,19 @@ export const PromptCards = () => {
       </Button>
 
       </HStack>
+      
 
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
         {selectedCategory.prompts.map(p => (
           <Box
             key={p.id}
-            bg='#1a1a1a'
+            bg={selectedCategory.id === CHAIN_MODE_ID ? '#00324c' : '#1a1a1a'}
             p={5}
             borderRadius='lg'
             _hover={{ boxShadow: '0 0 0 1px #333' }}
+            
           >
+            
             <VStack align='start' gap={3}>
               <Text fontWeight='bold' fontSize='lg'>
                 {p.name}
@@ -106,7 +115,8 @@ export const PromptCards = () => {
                     transform: 'scale(1.02)',
                     transition: 'all 0.15s ease-in-out', 
                   }}
-                  onClick={() => selectPrompt(p.id)}
+                    onClick={() => selectPrompt(p as Prompt | Chain)}
+
                 >
                   Open
                 </Button>

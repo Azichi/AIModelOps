@@ -11,6 +11,7 @@ import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { usePromptCtx } from '../PromptContext';
 import { useConfirm } from './Confirm';
 
+
 export const Sidebar = () => {
   const {
     categories,
@@ -22,6 +23,7 @@ export const Sidebar = () => {
   } = usePromptCtx();
   const toast = useToast();
   const { confirm, ConfirmModal } = useConfirm();
+
 
   const handleAdd = async () => {
     const name = prompt('Category name?');
@@ -38,9 +40,12 @@ export const Sidebar = () => {
       deleteCategory(id);
       toast({ title: 'Category removed.', status: 'success', duration: 1500 });
     }
+    
+
   };
 
   return (
+    
     <Box
       position='fixed'
       left={0}
@@ -66,6 +71,7 @@ export const Sidebar = () => {
       >
         New Category
       </Button>
+
 
       <VStack align='stretch' gap={3}>
         {categories.map(cat => (
@@ -115,6 +121,6 @@ export const Sidebar = () => {
         ))}
       </VStack>
       <ConfirmModal prompt='Delete category?' />
-    </Box>
+      </Box>
   );
 };

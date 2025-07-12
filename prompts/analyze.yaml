@@ -1,3 +1,4 @@
-Analyze this extracted data and list three insights:
+template: |
+  Analyze this and list three insights:
 
-{input}
+  {input}

@@ -1,4 +1,4 @@
-extract_analyze_report:
+prompt chain:
   - name: extract
     prompt_file: prompts/extract.yaml
 

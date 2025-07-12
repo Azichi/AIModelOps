@@ -1,0 +1,11 @@
+prompt_chain:
+  - name: diagnose
+    prompt_file: prompts/diagnose.yaml
+
+  - name: resolve
+    prompt_file: prompts/resolve.yaml
+    input_from: diagnose
+
+  - name: tighten
+    prompt_file: prompts/tighten.yaml
+    input_from: resolve

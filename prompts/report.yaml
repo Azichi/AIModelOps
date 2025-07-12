@@ -1,3 +1,4 @@
-Summarize all findings below as a brief report for management:
+template: |
+  Summarize all findings below as a brief report for management:
 
-{input}
+  {input}

@@ -1,14 +1,19 @@
 import { createContext, useContext, useState } from 'react';
-import { Category, Prompt } from './types';
 import { seed } from './data';
 import { v4 as uuid } from 'uuid';
+import { Category, Prompt, Chain, AnyCategory } from './types';
+
+
+
+
+const CHAIN_MODE_ID = '__chain_mode__';
 
 type Ctx = {
 categories: Category[];
 selectCategory: (id: string) => void;
-selectedCategory?: Category;
-selectPrompt: (id: string) => void;
-selectedPrompt?: Prompt;
+selectedCategory?: AnyCategory;
+selectPrompt: (p: Prompt | Chain) => void;
+selectedPrompt?: Prompt | Chain;
 addCategory: (name: string) => void;
 editCategory: (id: string, name: string) => void;
 deleteCategory: (id: string) => void;
@@ -17,17 +22,34 @@ editPrompt: (cId: string, p: Prompt) => void;
 deletePrompt: (cId: string, pId: string) => void;
 };
 
+
 const PromptCtx = createContext({} as Ctx);
 export const usePromptCtx = () => useContext(PromptCtx);
+
+
+
+export const chains = [
+  {
+    id: 'chain_extract_analyze_report',
+    name: 'Extract + Analyze + Report',
+    description: 'Extracts data, analyzes it, and writes a report.',
+    chainFile: 'prompt_chains/extract_analyze_report.yaml',
+  },
+];
+
 
 export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 const [categories, setCats] = useState<Category[]>(seed);
 const [selectedCategoryId, setCatId] = useState<string | undefined>(seed[0]?.id);
-const [selectedPromptId, setPromptId] = useState<string | undefined>();
+const [selectedPrompt, setPrompt] = useState<Prompt | Chain | undefined>();
 
-const selectedCategory = categories.find(c => c.id === selectedCategoryId);
-const selectedPrompt =
-selectedCategory?.prompts.find(p => p.id === selectedPromptId);
+
+const selectedCategory: AnyCategory | undefined =
+  selectedCategoryId === CHAIN_MODE_ID
+    ? { id: CHAIN_MODE_ID, name: 'Chain Mode', prompts: chains }
+    : categories.find(c => c.id === selectedCategoryId);
+
+
 
 const mutateCats = (fn: (c: Category[]) => Category[]) => setCats(fn);
 
@@ -43,7 +65,7 @@ const deleteCategory = (id: string) => {
 mutateCats(c => c.filter(cat => cat.id !== id));
 if (selectedCategoryId === id) {
 setCatId(undefined);
-setPromptId(undefined);
+setPrompt(undefined);
 }
 };
 
@@ -70,13 +92,21 @@ cat.id === cId ? { ...cat, prompts: cat.prompts.filter(pr => pr.id !== pId) } : 
 ),
 );
 
+const selectCategory = (id: string) => {
+  setCatId(id);
+  setPrompt(undefined);
+};
+
+
+
+
 return (
 <PromptCtx.Provider
 value={{
 categories,
-selectCategory: setCatId,
+selectCategory,
 selectedCategory,
-selectPrompt: setPromptId,
+selectPrompt: setPrompt,
 selectedPrompt,
 addCategory,
 editCategory,
