@@ -21,48 +21,50 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Log in to ACR
-        run: az acr login --name aimodelopsnorwayeast.azurecr.io
+        run: az acr login --name aimocr
+
 
       - name: Build and push backend image
         run: |
-          docker build -t aimodelopsnorwayeast.azurecr.io/runner:latest ./runner
-          docker push aimodelopsnorwayeast.azurecr.io/runner:latest
+          docker build -t aimocr.azurecr.io/runner:latest ./runner
+          docker push aimocr.azurecr.io/runner:latest
+
 
       - name: Build and push frontend image
         run: |
-          docker build -t aimodelopsnorwayeast.azurecr.io/frontend:latest ./frontend
-          docker push aimodelopsnorwayeast.azurecr.io/frontend:latest
+          docker build -t aimocr.azurecr.io/frontend:latest ./frontend
+          docker push aimocr.azurecr.io/frontend:latest
 
       - name: Delete existing backend container instance (ignore error if missing)
         run: |
-          az container delete --name aimodelops-runner --resource-group aimodelops_rg --yes || true
+          az container delete --name aimocr-runner --resource-group AIMOResourceGroup --yes || true
 
       - name: Create backend container instance
         run: |
           az container create \
-            --resource-group aimodelops_rg \
-            --name aimodelops-runner \
-            --image aimodelopsnorwayeast.azurecr.io/runner:latest \
-            --registry-login-server aimodelopsnorwayeast.azurecr.io \
+            --resource-group AIMOResourceGroup \
+            --name aimocr-runner \
+            --image aimocr.azurecr.io/runner:latest \
+            --registry-login-server aimocr.azurecr.io \
             --cpu 1 \
             --memory 2 \
-            --dns-name-label aimodelops-runner-dns \
+            --dns-name-label aimocr-runner-dns \
             --ports 8000 \
             --restart-policy Always \
             --environment-variables OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
 
       - name: Delete existing frontend container instance (ignore error if missing)
         run: |
-          az container delete --name aimodelops-frontend --resource-group aimodelops_rg --yes || true
+          az container delete --name aimocr-frontend --resource-group AIMOResourceGroup --yes || true
 
       - name: Create frontend container instance
         run: |
           az container create \
-            --resource-group aimodelops_rg \
-            --name aimodelops-frontend \
-            --image aimodelopsnorwayeast.azurecr.io/frontend:latest \
-            --registry-login-server aimodelopsnorwayeast.azurecr.io \
+            --resource-group AIMOResourceGroup \
+            --name aimocr-frontend \
+            --image aimocr.azurecr.io/frontend:latest \
+            --registry-login-server aimocr.azurecr.io \
             --cpu 1 \
             --memory 1 \
-            --dns-name-label aimodelops-frontend-dns \
+            --dns-name-label aimocr-frontend-dns \
             --restart-policy Always
