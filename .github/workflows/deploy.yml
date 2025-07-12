@@ -50,6 +50,7 @@ jobs:
             --registry-password ${{ secrets.ACR_PASSWORD }} \
             --cpu 1 \
             --memory 2 \
+            --os-type Linux \
             --dns-name-label aimocr-runner-dns \
             --ports 8000 \
             --restart-policy Always \
@@ -70,5 +71,6 @@ jobs:
             --registry-password ${{ secrets.ACR_PASSWORD }} \
             --cpu 1 \
             --memory 1 \
+            --os-type Linux \
             --dns-name-label aimocr-frontend-dns \
             --restart-policy Always
