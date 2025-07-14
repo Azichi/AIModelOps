@@ -1,6 +1,6 @@
 """ OPENAI CONFIG """
 DEFAULT_MODEL = "gpt-4.1"
-AVAILABLE_MODELS = ["gpt-4.1, gpt-4o", "gpt-4-1106-preview", "gpt-3.5-turbo"]
+AVAILABLE_MODELS = ["gpt-4.1", "gpt-4o", "gpt-4-1106-preview", "gpt-3.5-turbo"]
 DEFAULT_TEMPERATURE = 1.0
 DEFAULT_TOP_P = 1.0
 DEFAULT_SYSTEM_PROMPT = (
