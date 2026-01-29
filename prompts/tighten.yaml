@@ -1,0 +1,17 @@
+template: |
+  Edit and tighten the draft.
+
+  Draft:
+  {draft_v2}
+
+  Global Style Settings:
+  {global_style_settings}
+
+  Task:
+  - Delete or merge sentences marked <<<CUT>>>.
+  - Tighten wording, fix grammar, ensure consistent tone.
+  - Return JSON:
+    {
+      "final_text": "<edited text>",
+      "residual_issues": "<remaining issues or 'none'>"
+    }

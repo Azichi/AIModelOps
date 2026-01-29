@@ -1,0 +1,9 @@
+{
+  "table": "orders",
+  "columns": [
+    "order_id",
+    "customer_id",
+    "total"
+  ],
+  "filters": "total > 1000 AND status = 'PAID'"
+}

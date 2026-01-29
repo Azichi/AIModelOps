@@ -1,0 +1,22 @@
+:root {
+  --background: #f4f3ef;
+  --surface: #ffffff;
+  --surfaceAlt: #efede7;
+  --textPrimary: #1f2428;
+  --textMuted: #6b6f76;
+  --border: #d6d2c8;
+  --accent: #0f766e;
+  --accentHover: #0b5e58;
+  --danger: #c2410c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  background: var(--background);
+  color: var(--textPrimary);
+}

@@ -1,0 +1,11 @@
+prompt chain:
+  - name: extract
+    prompt_file: prompts/extract.yaml
+
+  - name: analyze
+    prompt_file: prompts/analyze.yaml
+    input_from: extract
+
+  - name: report
+    prompt_file: prompts/report.yaml
+    input_from: analyze

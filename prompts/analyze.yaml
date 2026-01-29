@@ -1,0 +1,4 @@
+template: |
+  Analyze this and list three insights:
+
+  {input}

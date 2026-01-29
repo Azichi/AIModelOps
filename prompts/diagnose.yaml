@@ -1,0 +1,14 @@
+template: |
+  Review the draft below for clarity issues.
+
+  Draft:
+  {input}
+
+  Global Style Settings:
+  {global_style_settings}
+
+  Tasks:
+  - Identify repetition, vague wording, structural gaps, contradictions, or tone shifts.
+  - Suggest a clear outline.
+  - List any facts or decisions needed.
+  - Return JSON: {issue_map, outline, contradictions_to_resolve, scorecard}.
