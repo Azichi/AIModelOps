@@ -4,6 +4,8 @@ from subprocess import run, Popen, PIPE
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import sys
+import json
+import tempfile
 
 app = FastAPI()
 app.add_middleware(
@@ -13,19 +15,34 @@ app.add_middleware(
 
 # ---- RUN SINGLE PROMPT ----
 @app.post("/run-single")
-async def run_single(prompt_id: str = Form(...), model: str = Form("gpt-4o"), input_file: UploadFile = File(None)):
+async def run_single(
+    prompt_id: str = Form(...),
+    model: str = Form("gpt-4o"),
+    input_file: UploadFile = File(None),
+    input_text: str = Form(None),
+):
     input_arg = []
-    if input_file:
-        temp_path = f"/tmp/{input_file.filename}"
-        with open(temp_path, "wb") as f:
-            f.write(await input_file.read())
-        input_arg = ["--input", temp_path]
-    cmd = [sys.executable, "runner/run_prompt.py", prompt_id, "--model", model] + input_arg
-    result = run(cmd, stdout=PIPE, stderr=PIPE)
-    output = result.stdout.decode()
-    if input_file:
-        os.remove(temp_path)
-    return JSONResponse({"output": output, "stderr": result.stderr.decode()})
+    temp_path = None
+    try:
+        if input_text:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as f:
+                json.dump({"input": input_text}, f)
+                temp_path = f.name
+            input_arg = ["--input", temp_path]
+        elif input_file:
+            suffix = os.path.splitext(input_file.filename or "")[1]
+            with tempfile.NamedTemporaryFile(mode="wb", suffix=suffix, delete=False) as f:
+                f.write(await input_file.read())
+                temp_path = f.name
+            input_arg = ["--input", temp_path]
+
+        cmd = [sys.executable, "runner/run_prompt.py", prompt_id, "--model", model] + input_arg
+        result = run(cmd, stdout=PIPE, stderr=PIPE)
+        output = result.stdout.decode()
+        return JSONResponse({"output": output, "stderr": result.stderr.decode()})
+    finally:
+        if temp_path and os.path.exists(temp_path):
+            os.remove(temp_path)
 
 # ---- RUN CHAIN ----
 @app.post("/run-chain")
